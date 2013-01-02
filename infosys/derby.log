@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Wed Jan 02 21:04:35 CET 2013:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-013b-fcdd-8984-0000031b0528 
+on database directory /home/agribu/doc/studium/module/gdb/praktikum/Aufgabe6/infosys/gdb-Studienverlaufsplan-DB/gdb-praktikum  with class loader sun.misc.Launcher$AppClassLoader@138d107f 
+Loaded from file:/home/agribu/doc/studium/module/gdb/praktikum/Aufgabe6/infosys/lib/derby.jar
+java.vendor=Sun Microsystems Inc.
+java.runtime.version=1.6.0_24-b24
+user.dir=/home/agribu/doc/studium/module/gdb/praktikum/Aufgabe6/infosys
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

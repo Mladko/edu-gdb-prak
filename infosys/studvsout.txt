@@ -1,0 +1,12 @@
+[[Studienverlaufsplan
+Medieninformatik (MI), 					1.Semester, 	2.Semester, 	3.Semester, 	4.Semester, 	5.Semester, 	6.Semester, 			], 
+[Nr  Fach, 							V  Ü  P  Prüf, 	V  Ü  P  Prüf, 	V  Ü  P  Prüf, 	V  Ü  P  Prüf, 	V  Ü  P  Prüf, 	V  Ü  P  Prüf, 			Summe], 
+[1   Math. u. naturwiss.-techn. Grundlagen, 	3  1  0  5, 	3  1  0  5, 	3  1  0  5, 	3  1  0  5,		 , 			3  1  0  5, 			24, 3  1  0  5, , , , , , , ], 
+[2   Informatik, 							3  1  0  5, 	3  1  0  5,		2  1  1  5, 	2  1  1  5, 	2  1  1  5,		 , 					44, 
+									3  0  1  5, 	2  0  2  5, 	3  0  1  5, 	2  1  1  5, 	3  1  0  5, 	3  1  0  5,				 ,
+									,			,			, ], 
+[3   Spezieller Anwendungsbereich Medien, 	2  0  2  5, , , 3  1  0  5, 2  0  2  5, 1  0  4  10, 37, 2  1  1  5, , 2  1  1  5, 2  0  2  5, 2  1  1  5, 2  1  1  5, , , ], 
+[4   Soft Skills, 							, 0  4  0  5, , , , 3  1  0  5, 8, 0  0  0  3, , , , ], 
+[5   Wahlpflicht,						, , , , 2  0  2  5, , 4],
+[6   Bachelor-Arbeit und externe Praxisphase, , , , , , 0  0  0  12, 0, 0  0  0  3, 0  0  0  12], 
+[Summe SWS, 						24, 			24, 			24, 			24, 			21, 			0, 					117]]
