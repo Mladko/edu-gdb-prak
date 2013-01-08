@@ -36,11 +36,9 @@ import org.jfree.data.jdbc.JDBCPieDataset;
 
 /**
  * Ein Objekt dieser Klasse dient der Bindung zwischen der GUI und der Derby DB.
- * TODO: Studienverlaufsplan: Kategorien - siehe studsout.txt
- * RTFM: Kategorien!
  * 
  * @author agribu
- * @version 20121230v0.1b
+ * @version 20121230v0.1rc
  */
 public class DataAccessObjectImpl implements DataAccessObject {
 
@@ -49,7 +47,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
     /** JDBC-Treiber-Pfad */
     private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
     /** Pfad zur Datenbank */
-    private static final String URL = "jdbc:derby:/home/agribu/doc/studium/module/gdb/praktikum/Aufgabe6/infosys/gdb-Studienverlaufsplan-DB/gdb-praktikum";
+    private static final String URL = "jdbc:derby:dist/gdb-praktikum";
 
     /**
      * Erstellt ein DataAccessObjectImpl-Objekt
@@ -83,7 +81,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
 
     }
 
-    /** DONE!
+    /**
      * Fügt einen neuen Studenten in die Datenbank hinzu
      * 
      * @param adresse                   Adresse des Studenten
@@ -108,7 +106,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
             ResultSet rs = preStmt.executeQuery();
             /* 
              * next() ist true, wenn mehr als eine Zeile existiert.
-             * D.h. es existieren auch mehrere Tabelleneinträge mit derselben Matrikelnummer.
+             * D.h. es existiert schon mindestens ein Eintrag mit derselben Matrikelnummer.
              */
             if (rs.next()) {
 
@@ -117,6 +115,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
 
             }
             rs.close();
+            preStmt.close();
 
             /* Hinzufügen des Studenten in die Datenbank */
             sqlQuery = "insert into student(matrikel, name, vorname, adresse, skuerzel) "
@@ -127,8 +126,9 @@ public class DataAccessObjectImpl implements DataAccessObject {
             preStmt.setString(3, vorname);      //Vorname des Studenten
             preStmt.setString(4, adresse);      //Adresse des Studenten
             preStmt.setString(5, kuerzel);      //Studienrichtungskürzel des Studenten
+            
             preStmt.execute();
-            rs.close();
+            preStmt.close();
 
         } catch (SQLException ex) {
 
@@ -163,6 +163,9 @@ public class DataAccessObjectImpl implements DataAccessObject {
 
         /* Info, ob ein neuer Student hinzugefügt wurde */
         boolean studentAdded = true;
+        
+        /* Errorcode zur Fehlerbehandlung */
+        int errcode = -1;
 
         try {
 
@@ -204,15 +207,14 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 }
                 if (!istEnthalten) {
 
-                    throw new ApplicationException(
-                            "Das übergebene Modul ist nicht Bestandteil der Studienrichtung des anzumeldenden Studenten!");
+                    errcode = 0;
 
                 }
 
                 /* Info, ob Modul ein Praktikum beinhaltet */
                 if (modul.getPraktikum() == 0) {
 
-                    throw new ApplicationException("Das übergebene Modul sieht kein Praktikum vor!");
+                    errcode = 1;
 
                 }
 
@@ -239,8 +241,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 /* next() ist true, wenn mehr als eine Zeile existiert. */
                 if (rs.next()) {
 
-                    throw new ApplicationException(
-                            "Es existiert bereits eine Anmeldung des übergebenen Studenten am übergebenen Modul im übergebenen Semester.");
+                    errcode = 2;
 
                 }
 
@@ -262,8 +263,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 /* Prüfe, ob Einträge vorhanden sind */
                 if (!rs.next()) {
 
-                    throw new ApplicationException(
-                            "Es wurde keine oder eine nicht erfasste Studienrichtung für den neu anzulegenden Studenten angegeben.");
+                    errcode = 3;
 
                 }
 
@@ -286,6 +286,74 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 System.out.println(preStmt.executeUpdate());
 
                 preStmt.close();
+                
+                /* Fehlerbehandlung */
+                if (errcode != -1) {
+                    
+                    /* Fehlermeldung */
+                    String errMsg = "";
+                    
+                    /* Verwerfe Änderungen */
+                    try {
+
+                        this.con.rollback();
+
+                    } catch (SQLException sqlex1) {
+
+                        System.out.println("Methode: announce");
+                        System.err.println(sqlex1.getLocalizedMessage());
+                        sqlex1.printStackTrace();
+
+                    }
+                    
+                    this.con.setAutoCommit(true);
+ 
+                    /* Ausgabe: Fehlermeldung und Abbruch des Programms */
+                    switch (errcode) {
+                        
+                        case 0: {
+                            
+                            errMsg = "Das übergebene Modul ist nicht Bestandteil der Studienrichtung des anzumeldenden Studenten!";
+                            System.out.println("Errcode: 0: " + errMsg);
+                            throw new ApplicationException(errMsg);
+                            
+                        }
+                            
+                        case 1: {
+                            
+                            errMsg = "Das übergebene Modul sieht kein Praktikum vor!";
+                            System.out.println("Errcode: 1: " + errMsg);
+                            throw new ApplicationException(errMsg);
+                            
+                        }
+                            
+                        case 2: {
+                            
+                            errMsg = "Es existiert bereits eine Anmeldung des übergebenen Studenten am übergebenen Modul im übergebenen Semester.";
+                            System.out.println("Errcode: 2: " + errMsg);
+                            throw new ApplicationException(errMsg);
+                            
+                        }
+                            
+                        case 3: {
+                            
+                            errMsg = "Es wurde keine oder eine nicht erfasste Studienrichtung für den neu anzulegenden Studenten angegeben.";
+                            System.out.println("Errcode: 3: " + errMsg);
+                            throw new ApplicationException(errMsg);
+                            
+                        }
+                        
+                        default: {
+
+                            errMsg = "Ein Fehler zur Anmeldung einer Praktikumsteilnahme ist aufgetreten.";
+                            System.out.println("Errcode: default: " + errMsg);
+                            throw new ApplicationException(errMsg);
+
+                        }     
+                        
+                    }
+                    
+                }
 
                 /* Einpflegen der Änderungen in die Datenbank */
                 this.con.commit();
