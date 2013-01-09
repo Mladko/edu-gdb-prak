@@ -269,23 +269,6 @@ public class DataAccessObjectImpl implements DataAccessObject {
 
                 rs.close();
                 preStmt.close();
-
-                /*
-                 * Wenn alle Prüfungen erfolgreich, pflege neue Daten in die Datenbank ein.
-                 */
-
-                /* Vorbereitung der SQL Abfrage */
-                sqlQuery = "insert into praktikumsteilnahme(matrikel, mkuerzel, semester)"
-                        + " values(?, ?, ?)";
-                preStmt = this.con.prepareStatement(sqlQuery);
-                preStmt.setString(1, matrikel);
-                preStmt.setString(2, modul.getKuerzel());
-                preStmt.setString(3, semester);
-
-                /* Durchführung der SQL Abfrage */
-                System.out.println(preStmt.executeUpdate());
-
-                preStmt.close();
                 
                 /* Fehlerbehandlung */
                 if (errcode != -1) {
@@ -353,7 +336,26 @@ public class DataAccessObjectImpl implements DataAccessObject {
                         
                     }
                     
+                    return;
+                    
                 }
+
+                /*
+                 * Wenn alle Prüfungen erfolgreich, pflege neue Daten in die Datenbank ein.
+                 */
+
+                /* Vorbereitung der SQL Abfrage */
+                sqlQuery = "insert into praktikumsteilnahme(matrikel, mkuerzel, semester)"
+                        + " values(?, ?, ?)";
+                preStmt = this.con.prepareStatement(sqlQuery);
+                preStmt.setString(1, matrikel);
+                preStmt.setString(2, modul.getKuerzel());
+                preStmt.setString(3, semester);
+
+                /* Durchführung der SQL Abfrage */
+                System.out.println(preStmt.executeUpdate());
+
+                preStmt.close();
 
                 /* Einpflegen der Änderungen in die Datenbank */
                 this.con.commit();
