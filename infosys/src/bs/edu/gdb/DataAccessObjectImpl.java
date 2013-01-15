@@ -207,6 +207,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 }
                 if (!istEnthalten) {
 
+                    // Modul nicht Bestandteil der Studienrichtung
                     errcode = 0;
 
                 }
@@ -214,6 +215,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 /* Info, ob Modul ein Praktikum beinhaltet */
                 if (modul.getPraktikum() == 0) {
 
+                    // Modul hat kein Praktikum
                     errcode = 1;
 
                 }
@@ -241,6 +243,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 /* next() ist true, wenn mehr als eine Zeile existiert. */
                 if (rs.next()) {
 
+                    // Student ist bereits angemeldet
                     errcode = 2;
 
                 }
@@ -263,6 +266,7 @@ public class DataAccessObjectImpl implements DataAccessObject {
                 /* Prüfe, ob Einträge vorhanden sind */
                 if (!rs.next()) {
 
+                    // Es wurde keine oder eine nicht erfasste Studienrichtung angegeben
                     errcode = 3;
 
                 }
